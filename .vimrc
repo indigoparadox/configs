@@ -17,6 +17,7 @@ set expandtab
 set ruler 
 set modeline 
 set enc=utf-8 
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
 " 
 " Display Options 
 " 
