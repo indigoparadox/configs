@@ -1,7 +1,8 @@
 # General Options
 startup_message off
-backtick 1 5 5 /usr/scripts/status-battery.sh -l
-caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %1`%% - %c"
+#backtick 1 5 5 /usr/scripts/status-battery.sh -l
+#caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %1`%% - %c"
+caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= @%H - %LD %d %LM - %c"
 defscrollback 1000000
 
 # Disable useless/annoying freeze.
