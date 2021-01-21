@@ -19,6 +19,11 @@ for i in $CONFIGSYNC_DIR/* $CONFIGSYNC_DIR/.*; do
 
    CONFIGSYNC_HOME_TARGET="$HOME/`basename "$i"`"
 
+   if [ "x$i" = "x$CONFIGSYNC_DIR/.git" ]; then
+      echo "Skipping git repo."
+      continue
+   fi
+
    # See if link already exists.
    if [ -L "$CONFIGSYNC_HOME_TARGET" ]; then
       echo "Link for $i already exists."
