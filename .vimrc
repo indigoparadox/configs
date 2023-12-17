@@ -18,6 +18,16 @@ set ruler
 set modeline 
 set enc=utf-8 
 autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+command -nargs=1 RFvdp :!cd retrovdp/<args> && make clean && make && cp rvdp*.{so,dll} ../.. && cd ../..
+command -nargs=1 MCM :!make clean && make <args>
+command GPmaug :!cd maug && git pull && cd ..
+command GP :!git pull
+command -nargs=1 GCD :!git commit -a --date <args>
+command GC :!git commit -a
+command GS :!git push
+command -nargs=1 GCr :!cd <args> && git commit -a && cd ..
+command -nargs=1 GSr :!cd <args> && !git push && cd ..
+command Sp :setlocal spell spelllang=en_us
 " 
 " Display Options 
 " 
