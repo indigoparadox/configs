@@ -3,7 +3,9 @@
 CONFIGSYNC_DIR="`dirname "$0"`"
 CONFIGSYNC_DIR="`cd "$CONFIGSYNC_DIR"`"
 CONFIGSYNC_DIR="`pwd -P`"
-CONFIGSYNC_EXCLUDE="setup.sh .stfolder .stignore . .."
+CONFIGSYNC_EXCLUDE="setup.sh .config .stfolder .stignore .git .gitignore . .."
+
+# TODO: Setup systemd services.
 
 for i in $CONFIGSYNC_DIR/* $CONFIGSYNC_DIR/.*; do
    # Skip excluded files.
