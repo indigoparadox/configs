@@ -3,7 +3,7 @@
 CONFIGSYNC_DIR="`dirname "$0"`"
 CONFIGSYNC_DIR="`cd "$CONFIGSYNC_DIR"`"
 CONFIGSYNC_DIR="`pwd -P`"
-CONFIGSYNC_EXCLUDE="setup.sh .config .stfolder .stignore .git .gitignore . .."
+CONFIGSYNC_EXCLUDE="setup.sh .config .stfolder .stignore .git .scripts .gitignore . .."
 
 # TODO: Setup systemd services.
 
