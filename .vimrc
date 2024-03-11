@@ -64,6 +64,14 @@ function! Compile()
    " appropriate compiler.
 endfunction
 "
+function! BufferList()
+   execute "silent redir @m"
+   execute "silent buffers"
+   execute "silent redir END"
+   let a=@m
+   return a
+endfunction
+"
 " Key Mappings
 "
 map <F5> <Esc>:call Compile()<CR>
