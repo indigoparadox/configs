@@ -7,16 +7,12 @@ usage() {
    echo output-pdf - What to call the created PDF.
 }
 
-convert_png() {
-   PNG_IN="$1"
-   PDF_OUT="$2"
-   gs -dSAFER -r600 -sDEVICE=pngalpha -o "$PNG_IN" "$PDF_OUT"
-}
-
 convert_pdf_ocr() {
-   PAGES_GLOB="$1"
+   PDF_OUT="$1"
+   shift
+   PAGES_GLOB="$@"
+   echo $PAGES_GLOB
    PAGES_TEMP="`mktemp -d --suffix=.build-pdf`"
-   PDF_OUT="$2"
    
    # Verify temp directory.
    if [ -z "$PAGES_TEMP" ]; then
@@ -28,9 +24,18 @@ convert_pdf_ocr() {
    IMAGE_LIST=""
    for i in $PAGES_GLOB; do
       IMAGE_BASE="`basename "$i" | sed 's/\.[^.]*$//'`"
-      IMAGE_LIST="$IMAGE_LIST $PAGES_TEMP/$IMAGE_BASE.pdf"
+      IMAGE_EXT="`basename "$i" | sed 's/.*\.\([^.]*\)/\1/'`"
       echo "processing $IMAGE_BASE..."
-      tesseract -l eng "$i" "$PAGES_TEMP/$IMAGE_BASE" pdf
+      if [ "png" = "$IMAGE_EXT" ]; then
+         # Convert and add the image to the image list.
+         IMAGE_LIST="$IMAGE_LIST $PAGES_TEMP/$IMAGE_BASE.pdf"
+         tesseract -l eng "$i" "$PAGES_TEMP/$IMAGE_BASE" pdf
+
+      elif [ "pdf" = "$IMAGE_EXT" ]; then
+         # Directly add the input PDF to the image list for appending.
+         IMAGE_LIST="$IMAGE_LIST $i"
+
+      fi
    done
 
    if [ -z "$IMAGE_LIST" ]; then
@@ -60,6 +65,11 @@ while [ "$1" ]; do
          shift
          PDF_OUTPUT="$1"
          ;;
+
+      *)
+         echo "extraneous element: $1"
+         echo "forgot to single-quote glob?"
+         exit 1
    esac
    shift
 done
@@ -83,5 +93,5 @@ if [ -f "$PDF_OUTPUT" ]; then
    exit 1
 fi
 
-convert_pdf_ocr "$IMAGE_INPUT" "$PDF_OUTPUT"
+convert_pdf_ocr "$PDF_OUTPUT" "$IMAGE_INPUT"
 
