@@ -94,7 +94,7 @@ function scan_input_doc() {
       -d "$SCAN_DOC_DEV" --source "ADF $SCAN_DUPLEX" \
       --resolution "$SCAN_RESOLUTION" --mode "$SCAN_MODE"
    then
-      echo "Could the scanner be off?"
+      echo "could the scanner be off?"
       exit 1
    fi
 }
@@ -159,6 +159,11 @@ if [ -f "$PDF_OUTPUT" ]; then
 fi
 
 if [ $SCAN_INPUT -eq 1 ]; then
+   if [ -z "$SCAN_DOC_DEV" ]; then
+      echo "\$SCAN_DOC_DEV not set!"
+      exit 1
+   fi
+
    SCAN_TEMP="`mktemp -d --suffix=.build-pdf`"
    IMAGE_INPUT="$SCAN_TEMP"'/*'".$SCAN_IM_FORMAT"
    scan_input_doc "$SCAN_DUPLEX" "$SCAN_RESOLUTION" "$SCAN_MODE" "$SCAN_TEMP/out%d.$SCAN_IM_FORMAT" "$SCAN_IM_FORMAT"
