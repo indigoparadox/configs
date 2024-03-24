@@ -5,6 +5,7 @@ MAC_MEM=1024
 # weird about an empty quoted arg and refuse to run.
 MAC_CD="-boot"
 MAC_CD_ISO="c"
+MAC_NET="user"
 while [ "$1" ]; do
    case "$1" in
       -m)
@@ -22,6 +23,11 @@ while [ "$1" ]; do
          # Keep ISO separate so we can quote it later.
          MAC_CD_ISO="$1"
          MAC_CD="-boot d -cdrom"
+         ;;
+
+      -n)
+         shift
+         MAC_NET="tap,ifname=$1,script=no,downscript=no"
          ;;
    esac
    shift
@@ -42,7 +48,7 @@ qemu-system-ppc \
    -prom-env 'vga-ndrv?=true' \
    -hda "$MAC_HDA" \
    -g 1024x768x32 \
-   -netdev user,id=mynet0 \
+   -netdev $MAC_NET,id=mynet0 \
    -rtc base=localtime \
    -device sungem,netdev=mynet0 \
    $MAC_CD "$MAC_CD_ISO"
