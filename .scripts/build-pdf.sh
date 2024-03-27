@@ -41,7 +41,7 @@ convert_pdf_ocr() {
          IMAGE_LIST="$IMAGE_LIST $PAGES_TEMP/$IMAGE_BASE.pdf"
 
          echo "deskewing $i..."
-         SKEW_ANGLE="`${IMAGE_EXT}_findskew "$i"`"
+         SKEW_ANGLE="`${IMAGE_EXT}_findskew "$i" 2>/dev/null`"
          if [ -n "$SKEW_ANGLE" ]; then
             echo "skew angle is: $SKEW_ANGLE"
             SKEW_ANGLE="`echo -1*$SKEW_ANGLE | bc`"
@@ -51,7 +51,8 @@ convert_pdf_ocr() {
 
          else
             # TODO: Just copy to intermediate dir.
-            echo "NOT IMPLEMENTED"
+            echo "deskewing failed for $IMAGE_BASE.$IMAGE_EXT"
+            cp -v "$i" "$PAGES_TEMP/$IMAGE_BASE.$SCAN_IM_FORMAT"
          fi
 
          echo "detecting text for $i..."
