@@ -11,6 +11,17 @@ TMUX_VERSION="`tmux -V 2>/dev/null | sed -e 's/[^0-9]//g'`"
 
 # TODO: Setup systemd services.
 
+echo "fixing prompt..."
+
+PROMPT_TEMP="$(mktemp --suffix=.bashrc)"
+sed 's/00m\\]\\\$/00m\\]$(__git_ps1)\\\$/g' "$HOME/.bashrc" > "$PROMPT_TEMP"
+if ! diff "$HOME/.bashrc" "$PROMPT_TEMP" > /dev/null; then
+   mv -v "$HOME/.bashrc" "$HOME/bashrc-$(date '+%Y%m%d%H%M%S')"
+   mv -v "$PROMPT_TEMP" "$HOME/.bashrc"
+fi
+
+echo "removing dead links..."
+
 # Remove specified dead links.
 for i in $CONFIGSYNC_REMOVE_DEAD; do
    CONFIGSYNC_HOME_TARGET="$HOME/$i"
@@ -21,6 +32,8 @@ for i in $CONFIGSYNC_REMOVE_DEAD; do
       rm -v "$HOME/$i"
    fi
 done
+
+echo "creating links..."
 
 for i in $CONFIGSYNC_DIR/* $CONFIGSYNC_DIR/.*; do
    # Skip excluded files.
