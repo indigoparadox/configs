@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# The following variables must be defined in the environment prior to use:
+#
+# - SCAN_DOC_DEV: SANE scanner device from which to scan PDFs.
+
 usage() {
    echo "$0 [-i input-glob] [-o output-pdf] [-s] [-d duplex] [-c]"
    echo
