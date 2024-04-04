@@ -43,7 +43,7 @@ function video_trim_black () {
       fi
    done
 
-   ffmpeg -i output.mp4 -filter_complex $TRIMS_OUT$V_CONCAT -map [v$(($V_INCR - 1))] "$TRIM_OUTPUT"
+   ffmpeg -i "$TRIM_INPUT" -filter_complex $TRIMS_OUT$V_CONCAT -map [v$(($V_INCR - 1))] "$TRIM_OUTPUT"
 }
 
 ffmpeg -framerate 25 -pattern_type glob -i "$VIDEO_SNAPS"'/*.jpg' -c:v libx264 -profile:v high -crf 20 -pix_fmt yuv420p "$VIDEO_OUT"
