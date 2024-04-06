@@ -88,3 +88,7 @@ for i in $CONFIGSYNC_DIR/* $CONFIGSYNC_DIR/.*; do
    ln -vs "$i" "$CONFIGSYNC_HOME_TARGET"
 done
 
+echo "creating directories..."
+
+mkdir -vp "$HOME/.cache/vimtmp"
+
