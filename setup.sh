@@ -92,3 +92,14 @@ echo "creating directories..."
 
 mkdir -vp "$HOME/.cache/vimtmp"
 
+echo "setting up autostarts..."
+
+AUTOSTART_DIR="$HOME/.config/autostart"
+if [ ! -d "$AUTOSTART_DIR" ]; then
+   mkdir -p "$AUTOSTART_DIR"
+fi
+
+if [ -x /usr/bin/barrier ]; then
+   ln -s "$CONFIGSYNC_DIR/.config/autostart/barrier.desktop" "$AUTOSTART_DIR"
+fi
+
