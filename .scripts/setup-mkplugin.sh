@@ -36,10 +36,10 @@ sudo chown -v root:root "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN"
 if [ -f "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN" ]; then
    if [ $CHECK_MK_PLUGIN_IS_CONFIG -eq 1 ]; then
       # Make config only root-readable.
-      chmod -v o-rwx "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN"
+      sudo chmod -v o-rwx "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN"
    else
       # Only mark actual plugins as executable.
-      chmod -v +x "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN"
+      sudo chmod -v +x "$CHECK_MK_PLUGINS_DIR/$CHECK_MK_PLUGIN"
    fi
 fi
 
