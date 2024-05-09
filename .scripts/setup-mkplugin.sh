@@ -13,6 +13,13 @@ if [ -z "$CHECK_MK_URL" ]; then
    exit 1
 fi
 
+if [ -z "$CHECK_MK_PLUGIN" ]; then
+   echo "usage: $0 [-c] <plugin_or_config>"
+   echo "-c                Specified file is actually a config to put in /etc."
+   echo "plugin_or_config  Plugin or config to download and install."
+   exit 1
+fi
+
 CHECK_MK_TEMP_DIR="`mktemp -d --suffix .checkmk`"
 if [ -z "$CHECK_MK_PLUGINS_DIR" ]; then
    if [ $CHECK_MK_PLUGIN_IS_CONFIG -eq 1 ]; then
