@@ -19,20 +19,23 @@ elif [ "status" = "$3" ]; then
 fi
 NG_POE_PORT="g$2"
 
+NG_COOKIE="`curl -s -X POST \
+   --data-urlencode "pwd=$NG_PWD" \
+   -d "login.x=0" \
+   -d "login.y=0" \
+   -d "err_flag=0" \
+   -d "err_msg=" \
+   -H "Content-Type: application/x-www-form-urlencoded" \
+   -c - \
+   -o /dev/null \
+   $NG_URL/base/main_login.html`"
+
+#echo "$NG_COOKIE"
+
 if [ "$NG_POE_METHOD" = "POST" ]; then
    # Perform login, then set power for port.
    NG_RESPONSE="`
-   curl -s -X POST \
-      --data-urlencode "pwd=$NG_PWD" \
-      -d "login.x=0" \
-      -d "login.y=0" \
-      -d "err_flag=0" \
-      -d "err_msg=" \
-      -H "Content-Type: application/x-www-form-urlencoded" \
-      -c - \
-      -o /dev/null \
-      $NG_URL/base/main_login.html | \
-   curl -s -X POST \
+   echo "$NG_COOKIE" | curl -s -X POST \
       -d "unit_no=1" \
       -d "java_port=" \
       -d "inputBox_interface1=" \
@@ -67,22 +70,15 @@ if [ "$NG_POE_METHOD" = "POST" ]; then
 
 else
    # Perform login, then grab POE status page and filter for port.
-   curl -s -X POST \
-      --data-urlencode "pwd=$NG_PWD" \
-      -d "login.x=0" \
-      -d "login.y=0" \
-      -d "err_flag=0" \
-      -d "err_msg=" \
-      -H "Content-Type: application/x-www-form-urlencoded" \
-      -c - \
-      -o /dev/null \
-      $NG_URL/base/main_login.html | \
-   curl -s -X GET \
+   echo "$NG_COOKIE" | curl -s -X GET \
       -b - -o - \
       $NG_URL/base/poe/poe_port_cfg.html | \
    grep ">$NG_POE_PORT<" | sed 's/.*\(Enable\|Disable\).*/\1/g'
 
 fi
 
-# TODO: Perform logout get request to main_login.
+# Logout of HTTP session.
+echo "$NG_COOKIE" | curl -s -X GET \
+   -b - -o /dev/null \
+   $NG_URL/base/main_login.html
 
