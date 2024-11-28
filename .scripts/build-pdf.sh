@@ -39,6 +39,7 @@ convert_pdf_ocr() {
       echo "processing $IMAGE_BASE..."
       if [ "png" = "$IMAGE_EXT" ] || \
          [ "pbm" = "$IMAGE_EXT" ] || \
+         [ "jpg" = "$IMAGE_EXT" ] || \
          [ "tiff" = "$IMAGE_EXT" ]
       then
          # Convert and add the image to the image list.
