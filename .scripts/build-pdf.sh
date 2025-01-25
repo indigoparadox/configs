@@ -15,6 +15,8 @@ usage() {
 }
 
 convert_pdf_ocr() {
+   SCAN_NOREMOVE=$1
+   shift
    SCAN_IM_FORMAT="$1"
    shift
    PAGES_RESOLUTION="$1"
@@ -47,17 +49,19 @@ convert_pdf_ocr() {
 
          echo "deskewing $i..."
          SKEW_ANGLE="`${IMAGE_EXT}_findskew "$i" 2>/dev/null`"
-         if [ -n "$SKEW_ANGLE" ]; then
+
+         if echo "$SKEW_ANGLE" | grep -q Cannot; then
+            # TODO: Just copy to intermediate dir.
+            echo "deskewing failed for $IMAGE_BASE.$IMAGE_EXT"
+            cp -v "$i" "$PAGES_TEMP/$IMAGE_BASE.$SCAN_IM_FORMAT"
+
+         else
             echo "skew angle is: $SKEW_ANGLE"
             SKEW_ANGLE="`echo -1*$SKEW_ANGLE | bc`"
             echo "deskew angle is: $SKEW_ANGLE"
             convert "$i" -rotate "$SKEW_ANGLE" \
                "$PAGES_TEMP/$IMAGE_BASE.$SCAN_IM_FORMAT"
 
-         else
-            # TODO: Just copy to intermediate dir.
-            echo "deskewing failed for $IMAGE_BASE.$IMAGE_EXT"
-            cp -v "$i" "$PAGES_TEMP/$IMAGE_BASE.$SCAN_IM_FORMAT"
          fi
 
          echo "detecting text for $i..."
@@ -81,7 +85,9 @@ convert_pdf_ocr() {
    pdfunite $IMAGE_LIST $PDF_OUT && rm $IMAGE_LIST
 
    # Cleanup.
-   rm -rfv "$PAGES_TEMP"
+   if [ $SCAN_NOREMOVE -eq 0 ]; then
+      rm -rfv "$PAGES_TEMP"
+   fi
 }
 
 function scan_input_doc() {
@@ -112,6 +118,7 @@ SCAN_MODE="Lineart"
 SCAN_DUPLEX="Front"
 SCAN_RESOLUTION=300
 SCAN_IM_FORMAT="tiff"
+SCAN_NOREMOVE=0
 while [ "$1" ]; do
    case "$1" in
       -i)
@@ -135,6 +142,10 @@ while [ "$1" ]; do
 
       -c)
          SCAN_MODE="Color"
+         ;;
+
+      -n)
+         SCAN_NOREMOVE=1
          ;;
 
       *)
@@ -175,8 +186,8 @@ if [ $SCAN_INPUT -eq 1 ]; then
    scan_input_doc "$SCAN_DUPLEX" "$SCAN_RESOLUTION" "$SCAN_MODE" "$SCAN_TEMP/out%d.$SCAN_IM_FORMAT" "$SCAN_IM_FORMAT"
 fi
 
-convert_pdf_ocr "$SCAN_IM_FORMAT" "$SCAN_RESOLUTION" "$PDF_OUTPUT" "$IMAGE_INPUT"
+convert_pdf_ocr $SCAN_NOREMOVE "$SCAN_IM_FORMAT" "$SCAN_RESOLUTION" "$PDF_OUTPUT" "$IMAGE_INPUT"
 
-if [ -n "$SCAN_TEMP" ] && [ -d "$SCAN_TEMP" ]; then
+if [ $SCAN_NOREMOVE -eq 0 ] && [ -n "$SCAN_TEMP" ] && [ -d "$SCAN_TEMP" ]; then
    rm -rvf "$SCAN_TEMP"
 fi
