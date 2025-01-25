@@ -84,3 +84,5 @@ else
    set directory=$HOME/.cache/vimtmp
    set viminfo='1000,n$HOME/.cache/viminfo
 end
+" Don't add EOL - Useful while hex editing!
+set nofixeol
