@@ -1,15 +1,15 @@
 #!/bin/bash
 
 _ausplit_exec_ffmpeg_first() {
-   echo ffmpeg -i "$1" -to "$2" -c copy "$3"
+   ffmpeg -i "$1" -to "$2" -c copy "$3"
 }
 
 _ausplit_exec_ffmpeg_last() {
-   echo ffmpeg -i "$1" -ss "$2" -c copy "$3"
+   ffmpeg -i "$1" -ss "$2" -c copy "$3"
 }
 
 _ausplit_exec_ffmpeg() {
-   echo ffmpeg -i "$1" -ss "$2" -to "$3" -c copy "$4"
+   ffmpeg -i "$1" -ss "$2" -to "$3" -c copy "$4"
 }
 
 # Parse args.
