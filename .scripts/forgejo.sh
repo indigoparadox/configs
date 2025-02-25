@@ -5,6 +5,11 @@ _forgejo_target_name=""
 while [ "$1" ]; do
    case "$1" in
       -d)
+         if [ "$_forgejo_action" != "" ] && \
+         [ "$_forgejo_action" != "debian-pkg" ]; then
+            echo "incompatible actions specified!"
+            exit 1
+         fi
          _forgejo_action="debian-pkg"
          shift
          _forgejo_pkg_pool="$_forgejo_pkg_pool $1"
