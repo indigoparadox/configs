@@ -7,7 +7,7 @@ while [ "$1" ]; do
       -d)
          _forgejo_action="debian-pkg"
          shift
-         _forgejo_pkg_pool="$1"
+         _forgejo_pkg_pool="$_forgejo_pkg_pool $1"
          ;;
 
       *)
@@ -38,8 +38,10 @@ if [ "debian-pkg" = "$_forgejo_action" ]; then
       echo "missing package pool!"
       exit 1
    fi
-   curl --user $FORGEJO_USER:$_forgejo_oauth \
-      --upload-file $_forgejo_target_name \
-      $FORGEJO_URL/api/packages/$FORGEJO_USER/debian/pool/$_forgejo_pkg_pool/main/upload
+   for pool in $_forgejo_pkg_pool; do
+      curl --user $FORGEJO_USER:$_forgejo_oauth \
+         --upload-file $_forgejo_target_name \
+         $FORGEJO_URL/api/packages/$FORGEJO_USER/debian/pool/$pool/main/upload
+   done
 fi
 
