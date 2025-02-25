@@ -44,9 +44,9 @@ if [ "debian-pkg" = "$_forgejo_action" ]; then
       exit 1
    fi
    for pool in $_forgejo_pkg_pool; do
-      curl --user $FORGEJO_USER:$_forgejo_oauth \
-         --upload-file $_forgejo_target_name \
-         $FORGEJO_URL/api/packages/$FORGEJO_USER/debian/pool/$pool/main/upload
+      curl --user "$FORGEJO_USER:$_forgejo_oauth" \
+         --upload-file "$_forgejo_target_name" \
+         "$FORGEJO_URL/api/packages/$FORGEJO_USER/debian/pool/$pool/main/upload"
    done
 fi
 
