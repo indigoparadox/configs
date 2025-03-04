@@ -3,7 +3,7 @@
 CONFIGSYNC_DIR="`dirname "$0"`"
 CONFIGSYNC_DIR="`cd "$CONFIGSYNC_DIR"`"
 CONFIGSYNC_DIR="`pwd -P`"
-CONFIGSYNC_EXCLUDE="setup.sh .config .stfolder .stignore .git .scripts .gitignore . .."
+CONFIGSYNC_EXCLUDE="setup.sh .config .stfolder .stignore .git .scripts .gitignore .firefox . .."
 CONFIGSYNC_REMOVE_DEAD=".tmux.conf .aliases"
 
 # Strip out letters and dots to produce 28, 29, 30, etc.
