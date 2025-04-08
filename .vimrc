@@ -35,6 +35,12 @@ if !exists("syntax_on")
    syntax on
 endif
 "
+" Associate filetypes
+filetype plugin on
+filetype indent on
+autocmd BufRead *.tsj set filetype=json
+autocmd BufEnter *.tmj set filetype=json
+"
 if has("gui_running")
    " If we're using gvim, set the theme to white on black and resize the
    " window to something comfortable.
