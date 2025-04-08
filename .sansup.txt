@@ -4,3 +4,5 @@ leak:libSDL2-2.0.so
 leak:libSDL-1.2.so
 leak:radeonsi_dri.so
 leak:libSDL2_mixer-2.0.so
+leak:libnvidia-glcore.so
+leak:libdbus-1.so
