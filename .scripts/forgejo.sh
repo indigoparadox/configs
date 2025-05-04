@@ -2,6 +2,7 @@
 
 _forgejo_action=""
 _forgejo_target_name=""
+_forgejo_pkg_store=""
 while [ "$1" ]; do
    case "$1" in
       -d)
@@ -15,6 +16,11 @@ while [ "$1" ]; do
          _forgejo_pkg_pool="$_forgejo_pkg_pool $1"
          ;;
 
+      -s)
+         shift
+         _forgejo_pkg_store="$1"
+         ;;
+
       *)
          _forgejo_target_name="$1"
          ;;
@@ -22,8 +28,11 @@ while [ "$1" ]; do
    shift
 done
 
-if [ -z "$_forgejo_action" ] || [ -z "$_forgejo_target_name" ]; then
-   echo "usage: $0 [-d pool-name] [target-file]"
+if [ -z "$_forgejo_action" ] || \
+   [ -z "$_forgejo_target_name" ] || \
+   [ -z "$_forgejo_pkg_store" ]
+then
+   echo "usage: $0 [-d pool-name] [-s package-store] [target-file]"
    exit 1
 fi
 
@@ -56,7 +65,7 @@ if [ "debian-pkg" = "$_forgejo_action" ]; then
    for pool in $_forgejo_pkg_pool; do
       _forgejo_response="`curl --user "$FORGEJO_USER:$_forgejo_oauth" \
          --upload-file "$_forgejo_target_name" --no-progress-meter \
-         "$FORGEJO_URL/api/packages/$FORGEJO_USER/debian/pool/$pool/main/upload"`"
+         "$FORGEJO_URL/api/packages/$_forgejo_pkg_store/debian/pool/$pool/main/upload"`"
       echo "$_forgejo_response"
       #if [ "package file already exists" = "$_forgejo_response" ]; then
       #   echo "attempting to replace..."
